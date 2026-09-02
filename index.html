@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RONY OFFICIAL RESELLER - Login</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  min-height:100vh;
+  background:#000;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* BACKGROUND */
+.bg{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  z-index:0;
+}
+
+.dot{
+  position:absolute;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:#08d8ed;
+  box-shadow:0 0 22px rgba(8,216,237,.35);
+}
+
+.d1{left:-18px;top:20%}
+.d2{right:7%;top:8%}
+.d3{left:28%;top:2%}
+.d4{right:-10px;top:42%}
+.d5{left:9%;bottom:15%}
+.d6{right:25%;bottom:4%}
+.d7{left:48%;bottom:18%}
+.d8{left:-25px;top:68%}
+
+/* LOADING SCREEN */
+.loader{
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:opacity .35s ease;
+}
+
+.loader.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.spinner{
+  width:58px;
+  height:58px;
+  border:4px solid #17323a;
+  border-top-color:#08d8ed;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+.loader h2{
+  margin:20px 0 7px;
+  color:#08d8ed;
+  letter-spacing:3px;
+}
+
+.loader p{
+  margin:0;
+  color:#777;
+  letter-spacing:2px;
+  font-size:12px;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* MAIN CARD */
+.card{
+  width:min(92%,575px);
+  margin:28px auto;
+  padding:42px 42px 34px;
+  background:#0d1018;
+  border:1px solid #1a2930;
+  border-radius:30px;
+  box-shadow:0 0 38px rgba(0,238,255,.10);
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+.logo{
+  width:128px;
+  height:128px;
+  margin:0 auto 24px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:5px solid #08d8ed;
+  box-shadow:
+    0 0 0 4px #ffd21a,
+    0 0 0 8px #f33,
+    0 0 26px rgba(8,216,237,.45);
+  overflow:hidden;
+  font-size:42px;
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* TITLE */
+h1{
+  margin:0;
+  text-align:center;
+  font-size:30px;
+  letter-spacing:2px;
+}
+
+.sub{
+  margin:7px 0 34px;
+  text-align:center;
+  color:#08d8ed;
+  letter-spacing:4px;
+  font-size:17px;
+}
+
+/* INPUT */
+input{
+  width:100%;
+  height:72px;
+  margin-bottom:18px;
+  padding:0 20px;
+  border-radius:17px;
+  border:1px solid #27303a;
+  outline:none;
+  background:#000;
+  color:#fff;
+  font-size:17px;
+}
+
+input::placeholder{
+  color:#777;
+}
+
+input:focus{
+  border-color:#08d8ed;
+  box-shadow:0 0 14px rgba(8,216,237,.18);
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  height:72px;
+  border:0;
+  border-radius:17px;
+  cursor:pointer;
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+button:disabled{
+  opacity:.65;
+  cursor:wait;
+}
+
+.login{
+  background:#08d8ed;
+  color:#000;
+  margin-bottom:18px;
+}
+
+.google{
+  background:#fff;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:27px;
+}
+
+.google svg{
+  width:25px;
+  height:25px;
+}
+
+.or{
+  text-align:center;
+  color:#4d515b;
+  letter-spacing:3px;
+  margin:0 0 22px;
+}
+
+.telegram{
+  background:transparent;
+  color:#08d8ed;
+  border:2px solid #08d8ed;
+  margin-bottom:25px;
+}
+
+/* LINKS */
+.links{
+  text-align:center;
+  line-height:2.15;
+  font-size:18px;
+}
+
+.links a{
+  color:#08d8ed;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.sep{
+  color:#666;
+  margin:0 10px;
+}
+
+.new{
+  color:#777;
+}
+
+/* MESSAGE */
+.msg{
+  min-height:23px;
+  margin:2px 0 13px;
+  text-align:center;
+  font-size:14px;
+  color:#08d8ed;
+}
+
+.msg.error{
+  color:#ff6262;
+}
+
+.msg.success{
+  color:#36ff91;
+}
+
+/* PANELS */
+.panel{
+  display:none;
+  margin-top:25px;
+  padding-top:25px;
+  border-top:1px solid #26313a;
+}
+
+.panel.active{
+  display:block;
+}
+
+.panel h2{
+  text-align:center;
+  color:#08d8ed;
+}
+
+.small-btn{
+  height:58px;
+  font-size:16px;
+  margin-top:5px;
+}
+
+.back{
+  background:transparent;
+  color:#08d8ed;
+  border:1px solid #08d8ed;
+}
+
+/* FOOTER */
+.footer{
+  margin-top:28px;
+  text-align:center;
+  color:#454952;
+  font-size:15px;
+}
+
+/* MOBILE */
+@media(max-width:520px){
+
+  .card{
+    padding:32px 24px 28px;
+    border-radius:25px;
+  }
+
+  h1{
+    font-size:25px;
+  }
+
+  .sub{
+    font-size:14px;
+  }
+
+  .logo{
+    width:110px;
+    height:110px;
+  }
+
+  input,
+  button{
+    height:64px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SECURITY LOADING -->
+<div id="loader" class="loader">
+  <div class="spinner"></div>
+  <h2>SECURITY VALIDATION</h2>
+  <p>PLEASE WAIT...</p>
+</div>
+
+<!-- BACKGROUND -->
+<div class="bg">
+  <div class="dot d1"></div>
+  <div class="dot d2"></div>
+  <div class="dot d3"></div>
+  <div class="dot d4"></div>
+  <div class="dot d5"></div>
+  <div class="dot d6"></div>
+  <div class="dot d7"></div>
+  <div class="dot d8"></div>
+</div>
+
+<!-- LOGIN CARD -->
+<main class="card">
+
+  <!-- PROFILE PHOTO -->
+  <div class="logo">
+    <img
+      src="photo.jpg"
+      alt="RONY OFFICIAL RESELLER"
+      onerror="this.style.display='none';this.parentElement.textContent='👑';"
+    >
+  </div>
+
+  <h1>👑 RONY OFFICIAL RESELLER 👑</h1>
+
+  <div class="sub">
+    AUTHORIZE ACCESS
+  </div>
+
+  <!-- LOGIN -->
+  <form id="loginForm">
+
+    <input
+      id="email"
+      type="email"
+      placeholder="EMAIL ADDRESS"
+      autocomplete="email"
+      required
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="PASSWORD"
+      autocomplete="current-password"
+      required
+    >
+
+    <div id="msg" class="msg"></div>
+
+    <button
+      id="loginBtn"
+      class="login"
+      type="submit"
+    >
+      LOGIN NOW
+    </button>
+
+  </form>
+
+  <!-- GOOGLE -->
+  <button
+    id="googleBtn"
+    class="google"
+    type="button"
+  >
+
+    <svg viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M21.35 12.27c0-.71-.06-1.24-.2-1.79H12v3.39h5.37a4.58 4.58 0 0 1-1.99 3.01v2.51h3.23c1.89-1.74 2.74-4.3 2.74-7.12z"
+      />
+
+      <path
+        fill="#34A853"
+        d="M12 21.98c2.7 0 4.97-.89 6.61-2.42l-3.23-2.51c-.89.6-2.02.96-3.38.96-2.6 0-4.81-1.76-5.6-4.13H3.06v2.59A9.98 9.98 0 0 0 12 21.98z"
+      />
+
+      <path
+        fill="#FBBC05"
+        d="M6.4 13.88a6.01 6.01 0 0 1 0-3.76V7.53H3.06a10 10 0 0 0 0 8.94l3.34-2.59z"
+      />
+
+      <path
+        fill="#EA4335"
+        d="M12 5.99c1.47 0 2.79.51 3.83 1.51l2.87-2.87C16.97 2.96 14.7 2 12 2a9.98 9.98 0 0 0-8.94 5.53L6.4 10.12C7.19 7.75 9.4 5.99 12 5.99z"
+      />
+    </svg>
+
+    SIGN IN WITH GOOGLE
+
+  </button>
+
+  <div class="or">
+    OR JOIN COMMUNITY
+  </div>
+
+  <!-- TELEGRAM -->
+  <button
+    id="telegramBtn"
+    class="telegram"
+    type="button"
+  >
+    JOIN TELEGRAM CHANNEL
+  </button>
+
+  <!-- LINKS -->
+  <div class="links">
+
+    <div>
+      <a id="forgotLink">
+        Forgot Password?
+      </a>
+
+      <span class="sep">|</span>
+
+      <a id="changeEmailLink">
+        Change Gmail
+      </a>
+    </div>
+
+    <div>
+      <span class="new">
+        New User ?
+      </span>
+
+      <a id="createLink">
+        Create Account
+      </a>
+    </div>
+
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <section
+    id="forgotPanel"
+    class="panel"
+  >
+
+    <h2>
+      FORGOT PASSWORD
+    </h2>
+
+    <input
+      id="resetEmail"
+      type="email"
+      placeholder="ENTER YOUR EMAIL"
+      autocomplete="email"
+    >
+
+    <button
+      id="resetBtn"
+      class="login small-btn"
+      type="button"
+    >
+      SEND PASSWORD RESET LINK
+    </button>
+
+    <button
+      class="back small-btn"
+      type="button"
+      onclick="closePanels()"
+    >
+      BACK TO LOGIN
+    </button>
+
+  </section>
+
+  <!-- CHANGE GMAIL -->
+  <section
+    id="changeEmailPanel"
+    class="panel"
+  >
+
+    <h2>
+      CHANGE GMAIL
+    </h2>
+
+    <input
+      id="newEmail"
+      type="email"
+      placeholder="ENTER NEW GMAIL"
+      autocomplete="email"
+    >
+
+    <button
+      id="changeEmailBtn"
+      class="login small-btn"
+      type="button"
+    >
+      SEND EMAIL CHANGE REQUEST
+    </button>
+
+    <button
+      class="back small-btn"
+      type="button"
+      onclick="closePanels()"
+    >
+      BACK TO LOGIN
+    </button>
+
+  </section>
+
+  <!-- CREATE ACCOUNT -->
+  <section
+    id="createPanel"
+    class="panel"
+  >
+
+    <h2>
+      CREATE ACCOUNT
+    </h2>
+
+    <input
+      id="signupEmail"
+      type="email"
+      placeholder="ENTER EMAIL"
+      autocomplete="email"
+    >
+
+    <input
+      id="signupPassword"
+      type="password"
+      placeholder="CREATE PASSWORD"
+      autocomplete="new-password"
+    >
+
+    <button
+      id="signupBtn"
+      class="login small-btn"
+      type="button"
+    >
+      CREATE ACCOUNT
+    </button>
+
+    <button
+      class="back small-btn"
+      type="button"
+      onclick="closePanels()"
+    >
+      BACK TO LOGIN
+    </button>
+
+  </section>
+
+  <div class="footer">
+    © 2026 RONY OFFICIAL RESELLER SYSTEM
+  </div>
+
+</main>
+
+<script>
+
+/* ==============================
+   SUPABASE CONFIG
+================================ */
+
+const SUPABASE_URL =
+  "https://dgknhptbbozshyfiyobo.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_NEHCtr3Y0o8FctOz5Jm59A_P4GhFAQd";
+
+const TELEGRAM_URL =
+  "https://t.me/+nHiJgdSXQ8VjZjA9";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* ==============================
+   HELPERS
+================================ */
+
+const $ = id =>
+  document.getElementById(id);
+
+const msg =
+  $("msg");
+
+
+function message(text,type="normal"){
+
+  msg.textContent = text;
+
+  msg.className =
+    "msg " +
+    (
+      type === "error"
+        ? "error"
+        : type === "success"
+        ? "success"
+        : ""
+    );
+}
+
+
+function setBusy(button,busy){
+
+  if(!button) return;
+
+  if(!button.dataset.originalText){
+    button.dataset.originalText =
+      button.textContent;
+  }
+
+  button.disabled = busy;
+
+  button.textContent =
+    busy
+      ? "PLEASE WAIT..."
+      : button.dataset.originalText;
+}
+
+
+function closePanels(){
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(panel =>
+      panel.classList.remove("active")
+    );
+
+  message("");
+}
+
+
+function openPanel(id){
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(panel =>
+      panel.classList.remove("active")
+    );
+
+  const panel = $(id);
+
+  if(panel){
+
+    panel.classList.add("active");
+
+    panel.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+
+  message("");
+}
+
+
+function goDashboard(){
+
+  window.location.href =
+    "./dashboard.html";
+}
+
+
+/* ==============================
+   LOADING
+================================ */
+
+window.addEventListener(
+  "load",
+  async () => {
+
+    setTimeout(() => {
+
+      $("loader")
+        .classList
+        .add("hide");
+
+    },900);
+
+    const {
+      data
+    } =
+    await supabaseClient
+      .auth
+      .getSession();
+
+    if(data.session){
+
+      goDashboard();
+    }
+
+  }
+);
+
+
+/* ==============================
+   REAL LOGIN
+================================ */
+
+$("loginForm")
+.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    const email =
+      $("email")
+      .value
+      .trim();
+
+    const password =
+      $("password")
+      .value;
+
+    if(!email || !password){
+
+      message(
+        "Enter your email and password.",
+        "error"
+      );
+
+      return;
+    }
+
+    const button =
+      $("loginBtn");
+
+    setBusy(button,true);
+
+    message("Signing in...");
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .auth
+      .signInWithPassword({
+
+        email:email,
+
+        password:password
+
+      });
+
+
+    if(error){
+
+      message(
+        error.message,
+        "error"
+      );
+
+      setBusy(button,false);
+
+      return;
+    }
+
+
+    if(!data.session){
+
+      message(
+        "No active session was returned.",
+        "error"
+      );
+
+      setBusy(button,false);
+
+      return;
+    }
+
+
+    message(
+      "SUCCESSFUL",
+      "success"
+    );
+
+
+    setTimeout(
+      goDashboard,
+      500
+    );
+
+  }
+);
+
+
+/* ==============================
+   REAL GOOGLE LOGIN
+================================ */
+
+$("googleBtn")
+.addEventListener(
+  "click",
+  async () => {
+
+    const button =
+      $("googleBtn");
+
+    setBusy(button,true);
+
+    message(
+      "Opening Google..."
+    );
+
+
+    const {
+      error
+    } =
+    await supabaseClient
+      .auth
+      .signInWithOAuth({
+
+        provider:"google",
+
+        options:{
+
+          redirectTo:
+            window.location.origin +
+            window.location.pathname
+
+        }
+
+      });
+
+
+    if(error){
+
+      message(
+        error.message,
+        "error"
+      );
+
+      setBusy(button,false);
+    }
+
+  }
+);
+
+
+/* ==============================
+   TELEGRAM
+================================ */
+
+$("telegramBtn")
+.onclick = () => {
+
+  window.location.href =
+    TELEGRAM_URL;
+
+};
+
+
+/* ==============================
+   FORGOT PASSWORD
+================================ */
+
+$("forgotLink")
+.onclick = () => {
+
+  openPanel(
+    "forgotPanel"
+  );
+
+};
+
+
+$("resetBtn")
+.onclick = async () => {
+
+  const button =
+    $("resetBtn");
+
+  const email =
+    $("resetEmail")
+    .value
+    .trim();
+
+
+  if(!email){
+
+    message(
+      "Please enter your email.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  setBusy(
+    button,
+    true
+  );
+
+  message(
+    "Sending password reset link..."
+  );
+
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .auth
+    .resetPasswordForEmail(
+      email,
+      {
+        redirectTo:
+          window.location.origin +
+          window.location.pathname
+      }
+    );
+
+
+  setBusy(
+    button,
+    false
+  );
+
+
+  if(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  message(
+    "SUCCESSFUL — Check your email for the password reset link.",
+    "success"
+  );
+
+};
+
+
+/* ==============================
+   CHANGE GMAIL
+================================ */
+
+$("changeEmailLink")
+.onclick = async () => {
+
+  const {
+    data
+  } =
+  await supabaseClient
+    .auth
+    .getSession();
+
+
+  if(!data.session){
+
+    message(
+      "Please login first to change your Gmail.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  openPanel(
+    "changeEmailPanel"
+  );
+
+};
+
+
+$("changeEmailBtn")
+.onclick = async () => {
+
+  const button =
+    $("changeEmailBtn");
+
+  const newEmail =
+    $("newEmail")
+    .value
+    .trim();
+
+
+  if(!newEmail){
+
+    message(
+      "Please enter the new Gmail.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const {
+    data
+  } =
+  await supabaseClient
+    .auth
+    .getSession();
+
+
+  if(!data.session){
+
+    message(
+      "Please login first.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  setBusy(
+    button,
+    true
+  );
+
+  message(
+    "Sending Gmail change confirmation..."
+  );
+
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .auth
+    .updateUser({
+
+      email:newEmail
+
+    });
+
+
+  setBusy(
+    button,
+    false
+  );
+
+
+  if(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  message(
+    "SUCCESSFUL — Confirmation email sent to the new Gmail.",
+    "success"
+  );
+
+};
+
+
+/* ==============================
+   CREATE ACCOUNT
+================================ */
+
+$("createLink")
+.onclick = () => {
+
+  openPanel(
+    "createPanel"
+  );
+
+};
+
+
+$("signupBtn")
+.onclick = async () => {
+
+  const button =
+    $("signupBtn");
+
+  const email =
+    $("signupEmail")
+    .value
+    .trim();
+
+  const password =
+    $("signupPassword")
+    .value;
+
+
+  if(!email || !password){
+
+    message(
+      "Enter email and password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    message(
+      "Password must be at least 6 characters.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  setBusy(
+    button,
+    true
+  );
+
+  message(
+    "Creating account..."
+  );
+
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .auth
+    .signUp({
+
+      email:email,
+
+      password:password,
+
+      options:{
+
+        emailRedirectTo:
+          window.location.origin +
+          window.location.pathname
+
+      }
+
+    });
+
+
+  setBusy(
+    button,
+    false
+  );
+
+
+  if(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(data.session){
+
+    message(
+      "SUCCESSFUL",
+      "success"
+    );
+
+    setTimeout(
+      goDashboard,
+      500
+    );
+
+  }else{
+
+    message(
+      "SUCCESSFUL — Check your email to confirm your account.",
+      "success"
+    );
+
+  }
+
+};
+
+
+/* ==============================
+   AUTH STATE
+================================ */
+
+supabaseClient
+  .auth
+  .onAuthStateChange(
+    (event,session) => {
+
+      if(
+        event === "SIGNED_IN" &&
+        session
+      ){
+
+        if(
+          location.pathname.endsWith(
+            "index.html"
+          ) ||
+          location.pathname === "/" ||
+          location.pathname === ""
+        ){
+
+          goDashboard();
+
+        }
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
